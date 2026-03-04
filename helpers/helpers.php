@@ -34,6 +34,12 @@ function db(): Database
     return app()->db;
 }
 
+
+function checkAuth(): bool
+{
+    return false;
+}
+
 function view(string $view = '', array $data = [], string|bool $layout = ''): string|View
 {
     if ($view) {

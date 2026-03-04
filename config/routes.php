@@ -1,16 +1,30 @@
 <?php
 
 /**
- * @var \PHPFramework\Application $app
+ * @var Application $app
  **/
 
 
-$app->router->get('/', [\App\Controllers\HomeController::class, 'index']);
+use App\Controllers\HomeController;
+use App\Controllers\UserController;
+use PHPFramework\Application;
+use PHPFramework\Middleware\Auth;
+use PHPFramework\Middleware\Guest;
 
-$app->router->get('/register', [\App\Controllers\UserController::class, 'register']);
-$app->router->get('/login', [\App\Controllers\UserController::class, 'login']);
+const MIDDLEWARE = [
+    'auth' => Auth::class,
+    'guest' => Guest::class
+];
 
-$app->router->post('/store', [\App\Controllers\UserController::class, 'store']);
+
+
+$app->router->get('/', [HomeController::class, 'index']);
+$app->router->get('/dashboard', [HomeController::class, 'dashboard'])->middleware(['auth']);
+$app->router->get('/register', [UserController::class, 'register'])->middleware(['guest']);
+$app->router->post('/register', [UserController::class, 'store'])->middleware(['guest']);
+$app->router->get('/logout', [UserController::class, 'logout'])->middleware(['auth']);
+$app->router->get('/login', [UserController::class, 'login'])->middleware(['guest']);
+$app->router->post('/login', [UserController::class, 'auth'])->middleware(['guest']);
 
 
 

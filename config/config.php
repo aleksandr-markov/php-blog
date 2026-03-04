@@ -4,6 +4,8 @@ define('ROOT', dirname(__DIR__));
 
 const WWW = ROOT . '/public';
 
+const DEBUG = 0;
+
 const CONFIG = ROOT . '/config';
 const HELPERS = ROOT . '/helpers';
 

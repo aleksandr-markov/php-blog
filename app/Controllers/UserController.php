@@ -11,7 +11,7 @@ class UserController extends BaseController
         return view('user/register');
     }
 
-    public function store()
+    public function store(): void
     {
         $model = new User();
         $model->loadData();
@@ -22,6 +22,7 @@ class UserController extends BaseController
             session()->set('formData', $model->attributes);
         } else {
             $model->attributes['password'] = password_hash($model->attributes['password'], PASSWORD_DEFAULT);
+
             if ($id = $model->save()) {
                 session()->setFlash('success', 'Thanks for registration. Your ID: ' . $id);
             } else {
@@ -31,7 +32,6 @@ class UserController extends BaseController
         }
 
         response()->redirect('/register');
-
     }
 
     public function login()

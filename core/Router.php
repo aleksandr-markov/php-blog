@@ -25,7 +25,7 @@ class Router
         $this->routes[] = [
             'path' => "/$path",
             'callback' => $callback,
-            'middleware' => null,
+            'middleware' => [],
             'method' => $method,
             'needCsrfToken' => true,
         ];
@@ -90,6 +90,7 @@ class Router
 
             $this->handleCsrf($route);
             $this->extractRouteParams($matches);
+            $this->handleMiddleware($route);
 
             return $route;
         }
@@ -122,6 +123,23 @@ class Router
         }
     }
 
+    private function handleMiddleware(array $route): void
+    {
+        $registeredMiddlewares = MIDDLEWARE;
+        $routeMiddlewares = $route['middleware'] ?? [];
+
+        foreach ($routeMiddlewares as $middlewareName) {
+            $isMiddlewareRegistered = isset($registeredMiddlewares[$middlewareName]);
+
+            if (!$isMiddlewareRegistered) {
+                continue;
+            }
+
+            $middlewareClass = $registeredMiddlewares[$middlewareName];
+            (new $middlewareClass)->handle();
+        }
+    }
+
     public function checkCsrfToken(): bool
     {
         $csrfTokenFromPost = $this->request->post('csrf_token');
@@ -132,6 +150,13 @@ class Router
     public function withoutCsrfToken(): self
     {
         $this->routes[array_key_last($this->routes)]['needCsrfToken'] = false;
+
+        return $this;
+    }
+
+    public function middleware(array $middleware): self
+    {
+        $this->routes[array_key_last($this->routes)]['middleware'] = $middleware;
 
         return $this;
     }

@@ -149,7 +149,7 @@
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div class="col-6">
                 <a class="blog-header-logo text-body-emphasis text-decoration-none"
-                   href="#">Large</a>
+                   href="<?= baseUrl('/') ?>">Large</a>
             </div>
             <div class="col-6 d-flex gap-3 justify-content-end align-items-center">
                 <a class="btn btn-sm btn-outline-secondary" href="<?= baseUrl('/register') ?>">Sign up</a>
